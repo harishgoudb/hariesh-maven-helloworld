@@ -1,5 +1,4 @@
-# This workflow compile and push a docker image for release purposes
-name: Maven Hello-World testing purpose only
+name: Maven Hello-World testing purpose only-MAVEN
 on: [push, pull_request]
 jobs:
   build:
@@ -20,7 +19,6 @@ jobs:
     - uses: jfrog/setup-jfrog-cli@v1
       env:
         JF_ARTIFACTORY_1: ${{ secrets.HARISH_CLI_GITHUB_ACTIONS }}
-        JFROG_CLI_LOG_LEVEL: DEBUG
     - run: |
         jfrog rt mvnc --global --server-id-resolve=artif --server-id-deploy=artif --repo-resolve-releases=libs-release --repo-resolve-snapshots=libs-snapshot --repo-deploy-releases=libs-release-local --repo-deploy-snapshots=libs-snapshot-local
     - name: Cache local Maven repository
