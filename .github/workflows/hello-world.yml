@@ -30,7 +30,7 @@ jobs:
           ${{ runner.os }}-jfrog-
     - name: Build with Maven
       # skip tests because they are connecting to data sources
-      run: 
+    - run: |
         jfrog rt mvn -Dmaven.test.skip.exec -B install
         jfrog rt bp
       env:
