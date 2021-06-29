@@ -1,4 +1,4 @@
-name: Maven Hello-World testing purpose only-MAVEN
+name: Maven Hello-World testing purpose only
 on: [push, pull_request]
 jobs:
   build:
