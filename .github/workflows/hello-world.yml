@@ -33,5 +33,6 @@ jobs:
     - run: |
         jfrog rt mvn -Dmaven.test.skip.exec -B install
       env:
-       M2_HOME: /usr/share/apache-maven-3.8.1 # If this is wrong, see output of mvn –version
+        M2_HOME: /usr/share/apache-maven-3.8.1 # If this is wrong, see output of mvn –version
+    - run: |        
         jfrog rt bp
