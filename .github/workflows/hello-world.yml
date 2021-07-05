@@ -1,4 +1,4 @@
-name: Maven Hello-World testing purpose only
+name: Maven Hello-World
 on: [push, pull_request]
 jobs:
   build:
