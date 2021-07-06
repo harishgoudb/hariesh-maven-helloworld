@@ -36,7 +36,7 @@ jobs:
     - name: Build with Maven
       # skip tests because they are connecting to data sources
       run: |
-        jfrog rt mvn -Dmaven.test.skip.exec -B install
+        jfrog rt mvn -Dmaven.test.skip.exec -Dartifactory.publish.artifacts=flase -B install
         jfrog rt bp
       env:
         M2_HOME: /usr/share/apache-maven-3.8.1
