@@ -16,9 +16,10 @@ jobs:
     - run: |
         # Ping the server
         jfrog rt ping
-    - uses: jfrog/setup-jfrog-cli@v1
+    - uses: jfrog/setup-jfrog-cli@v1.2.0
       env:
         JF_ARTIFACTORY_1: ${{ secrets.HARISH_CLI_GITHUB_ACTIONS }}
+        M2_HOME: /usr/share/apache-maven-3.8.1
         buildInfo.env.publisher.publishArtifacts: true
         buildInfo.env.publisher.publishBuildInfo: true
     - run: |
@@ -38,4 +39,6 @@ jobs:
         jfrog rt mvn -Dmaven.test.skip.exec -B install
         jfrog rt bp
       env:
-        M2_HOME: /usr/share/apache-maven-3.8.1 # If this is wrong, see output of mvn –version
+        M2_HOME: /usr/share/apache-maven-3.8.1
+        buildInfo.env.publisher.publishArtifacts: true
+        buildInfo.env.publisher.publishBuildInfo: true
