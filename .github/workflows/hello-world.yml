@@ -13,9 +13,6 @@ jobs:
     - uses: jfrog/setup-jfrog-cli@v1
       env:
         JF_ARTIFACTORY_1: ${{ secrets.HARISH_CLI_GITHUB_ACTIONS }}
-        M2_HOME: /usr/share/apache-maven-3.8.1
-        buildInfo.env.publisher.publishArtifacts: true
-        buildInfo.env.publisher.publishBuildInfo: true
     - run: |
         # Ping the server
         jfrog rt ping
@@ -26,6 +23,8 @@ jobs:
         jfrog rt mvnc --global --server-id-resolve=Artifactory --server-id-deploy=Artifactory --repo-resolve-releases=libs-release --repo-resolve-snapshots=libs-snapshot --repo-deploy-releases=libs-release-local --repo-deploy-snapshots=libs-snapshot-local
       env:
         M2_HOME: /usr/share/apache-maven-3.8.1
+        buildInfo.env.publisher.publishArtifacts: true
+        buildInfo.env.publisher.publishBuildInfo: true
     - name: Cache local Maven repository
       uses: actions/cache@v2
       with:
