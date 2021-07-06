@@ -22,7 +22,7 @@ jobs:
     - run: |
         jfrog rt mvnc --global --server-id-resolve=artif --server-id-deploy=artif --repo-resolve-releases=libs-release --repo-resolve-snapshots=libs-snapshot --repo-deploy-releases=libs-release-local --repo-deploy-snapshots=libs-snapshot-local
       env:
-        M2_HOME: /usr/local/Cellar/maven/3.8.1/libexec
+        M2_HOME: /usr/local/Cellar/maven/3.8.1/
     - name: Cache local Maven repository
       uses: actions/cache@v2
       with:
@@ -36,4 +36,4 @@ jobs:
         jfrog rt mvn -Dmaven.test.skip.exec -B install
         jfrog rt bp
       env:
-        M2_HOME: /usr/local/Cellar/maven/3.8.1/libexec # If this is wrong, see output of mvn –version
+        M2_HOME: /usr/local/Cellar/maven/3.8.1/ # If this is wrong, see output of mvn –version
