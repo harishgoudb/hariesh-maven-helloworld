@@ -25,7 +25,7 @@ jobs:
     - run: |
           version=$(jfrog rt mvn org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate -Dexpression=project.version -Dartifactory.publish.artifacts=false --no-transfer-progress -B -q -DforceStdout)
           echo "Version from pom: $version"
-          if [[ $version =~ -SNAPSHOT$ ]]; then
+          if [[ $version != -SNAPSHOT$ ]]; then
             jfrog rt mvn -B install --no-transfer-progress
             # echo "*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*"
             # echo "Collecting Information from Git"
