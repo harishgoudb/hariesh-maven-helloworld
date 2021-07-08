@@ -22,20 +22,26 @@ jobs:
         M2_HOME: /usr/share/apache-maven-3.8.1
     - run: |
         jfrog rt mvnc --global --server-id-resolve=Artifactory --server-id-deploy=Artifactory --repo-resolve-releases=libs-release --repo-resolve-snapshots=libs-snapshot --repo-deploy-releases=libs-release-local --repo-deploy-snapshots=libs-snapshot-local
-      env:
-        M2_HOME: /usr/share/apache-maven-3.8.1
-    - name: Cache local Maven repository
-      uses: actions/cache@v2
-      with:
-        path: ~/.m2/repository
-        key: ${{ runner.os }}-jfrog-${{ hashFiles('**/pom.xml') }}
-        restore-keys: |
-          ${{ runner.os }}-jfrog-
-    - name: Build with Maven
-      # skip tests because they are connecting to data sources
-      run: |
-        jfrog rt mvn -Dmaven.test.skip.exec -Dartifactory.publish.artifacts=true -B install
-        jfrog rt bp
-        jfrog rt bs
-      env:
-        M2_HOME: /usr/share/apache-maven-3.8.1
+    - run: |
+          version=$(jfrog rt mvn org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate -Dexpression=project.version -Dartifactory.publish.artifacts=false --no-transfer-progress -B -q -DforceStdout)
+          echo "Version from pom: $version"
+          if [[ $version =~ -SNAPSHOT$ ]]; then
+            jfrog rt mvn -B install --no-transfer-progress
+            # echo "*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*"
+            # echo "Collecting Information from Git"
+            # jfrog rt bag
+            # echo "*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*"
+            # echo "Collecting Environment Variables of the Build"
+            # jfrog rt bce
+            echo "*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*"
+            echo "Publish Build Information to Artifactory"
+            jfrog rt bp
+            echo "*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*"
+            echo "Scan Published Build with Xray"
+            jfrog rt bs --fail=false |& tee -a xray.log
+            grep -v "\[Info\]" xray.log > xray.json
+            grep -q "\"total_alerts\": [1-9]" xray.json && echo -e "::warning:: XRay alerts found" || true
+          else
+            echo "::warning:: No Maven deployment, because version is not snapshot"
+            exit 0
+          fi
