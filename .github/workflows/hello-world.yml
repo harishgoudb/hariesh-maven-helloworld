@@ -45,3 +45,5 @@ jobs:
             echo "::warning:: No Maven deployment, because version is not snapshot"
             exit 0
           fi
+      env:
+        M2_HOME: /usr/share/apache-maven-3.8.1
