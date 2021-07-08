@@ -41,5 +41,3 @@ jobs:
         jfrog rt bs
       env:
         M2_HOME: /usr/share/apache-maven-3.8.1
-        buildInfo.env.publisher.publishArtifacts: true
-        buildInfo.env.publisher.publishBuildInfo: true
